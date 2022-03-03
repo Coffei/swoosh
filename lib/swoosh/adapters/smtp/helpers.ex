@@ -21,14 +21,19 @@ defmodule Swoosh.Adapters.SMTP.Helpers do
   # TODO: Remove conditional handling when going 2.0
   gen_smtp_major =
     if Code.ensure_loaded?(:gen_smtp_client) do
+      IO.inspect("GENSMTP client loaded, getting the version")
       Application.load(:gen_smtp)
 
       :gen_smtp
       |> Application.spec(:vsn)
+      |> IO.inspect(label: "RAW version")
       |> to_string()
       |> Version.parse!()
+      |> IO.inspect(label: "PARSED version")
       |> Map.get(:major)
+      |> IO.inspect(label: "MAJOR version")
     else
+      IO.inspect("GENSMTP client not loaded and cannot be loaded")
       0
     end
 
